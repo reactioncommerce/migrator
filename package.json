@@ -1,0 +1,63 @@
+{
+  "name": "@reactioncommerce/migrator",
+  "version": "0.0.0-development",
+  "description": "Command line interface for migrating MongoDB databases",
+  "main": "./src/main.js",
+  "scripts": {
+    "lint": "eslint src",
+    "test": "jest src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reactioncommerce/migrator.git"
+  },
+  "author": "Reaction Commerce <hello@reactioncommerce.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/reactioncommerce/migrator/issues"
+  },
+  "homepage": "https://github.com/reactioncommerce/migrator#readme",
+  "bin": {
+    "migrator": "./src/cli.js"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "cli-progress": "^3.6.0",
+    "commander": "^2.20.0",
+    "envalid": "^6.0.1",
+    "inquirer": "^6.5.0",
+    "mongodb": "^3.5.2",
+    "pretty-ms": "^5.1.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "@reactioncommerce/eslint-config": "^2.1.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.14.2",
+    "husky": "^3.0.0",
+    "jest": "^25.1.0",
+    "semantic-release": "^17.0.2"
+  },
+  "eslintConfig": {
+    "extends": "@reactioncommerce"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
