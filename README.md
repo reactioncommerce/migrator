@@ -17,6 +17,30 @@ Although this CLI tool was created for [Reaction Commerce](https://reactioncomme
 - Migration history is stored and can be viewed or cleared with CLI commands
 - One level of version branching is supported. Versions can be either an integer or two integers separated with a dash (e.g., "2-1"). This causes the track to split, so that you can migrate up to "2-1" from "2-0", but if you migrate up to "3-0" from "2-0", the "2-1" migration will not run. This is useful if you need to migrate some data for an older release that you still support without affecting your current release.
 
+### Why we built this
+
+Put simply, we would have loved to use an out-of-the-box solution for MongoDB data versioning and migrations. We looked at and tried a few, including:
+
+https://www.npmjs.com/package/migrate-mongo
+https://www.npmjs.com/package/db-migrate
+https://www.npmjs.com/package/mongodb-migrations
+https://github.com/emmanuelbuah/mgdb-migrator
+https://www.npmjs.com/package/mongrator
+
+But none of these had everything we needed. Some were just not a great user experience. Others were not actively maintained.
+
+Some of the specific problems were:
+
+- The need to run `up` or `down` rather than just specifying a desired version
+- Insecure configuration
+- Difficult to run on remote servers / with GitOps
+- No support for multiple versioning tracks
+- APIs specific to Mongoose
+- No provided version checking function
+- No support for migration code living in NPM packages
+- Slow
+- Doesn't track/display migration history
+
 ## Usage
 
 This CLI looks for a config file in the current directory. We recommend that you create a new directory in which this config file and a `package.json` file will live, and commit it to version control.
@@ -153,13 +177,23 @@ Each migration version must provide one of the following for `down`:
 
 Both types of functions receive a migration context, which has a connection to the MongoDB database and a `progress` function for reporting progress.
 
+### How to Migrate Data
+
 The `up` and `down` functions should do whatever they need to do to move data from your N-1 or N+1 schema to your N schema. They must always be written as if there are millions of documents to convert, meaning they should use MongoDB bulk reads and writes and do updates in small batches.
+
+If errors are thrown, they will be caught. In fact, throwing an error is the only way to stop the migration process and mark the migration as failed.
+
+If you return something from your `up` or `down` function, it will be stored as `result` in the migration history. If you throw, the error message will be stored as `result` in the migration history instead.
 
 While running, the migration function can and should report its progress by calling `context.progress(percentDone)`. The migration function must return a Promise and when that promise resolves, the migration is considered done and the version for this namespace in the database is incremented. If the Promise is rejected, the migration is considered failed and the data may be in a partially migrated state.
 
+Additionally, you can and should make use of [MongoDB transactions](https://docs.mongodb.com/manual/core/transactions/) in your function if you are migrating multiple related collections in a way that will cause problems if some updates succeed and others fail.
+
 To avoid issues, we strongly suggest that you write idempotent migration code, that is, code that can be run multiple times and will do nothing, yet succeed, if the data is already migrated.
 
-After you've created and exported migrations for you package, the final step is to check the current migration version for each of your namespaces somewhere in your top-level or startup code, after you are connected to MongoDB but before you run any database commands. Do this by depending on the [@reactioncommerce/migrator-version-check]() NPM package and calling the function it exports. Refer to the documentation for that package.
+### How to Check Data Version in App Code
+
+After you've created and exported migrations for you package, the final step is to check the current migration version for each of your namespaces somewhere in your top-level or startup code, after you are connected to MongoDB but before you run any database commands. Do this by depending on the [@reactioncommerce/migrator-version-check](https://github.com/reactioncommerce/migrator-version-check) NPM package and calling the function it exports. Refer to the documentation for that package.
 
 ## Commit Messages
 
