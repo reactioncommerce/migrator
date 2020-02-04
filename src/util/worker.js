@@ -57,6 +57,12 @@ async function main() {
             parentPort.postMessage({ progress: percent });
           }
         });
+        if (result === null || result === undefined) {
+          result = "succeeded";
+        }
+        if (typeof result !== "string") {
+          throw new Error(`${direction} function returned a non-string value`);
+        }
       }
     } catch (error) {
       parentPort.postMessage({ progress: 0 });
@@ -70,7 +76,8 @@ async function main() {
         runInfo: {
           endedAt,
           endVersion,
-          errorMessage: error.message,
+          completed: false,
+          result: error.message,
           startedAt,
           startVersion
         }
@@ -85,6 +92,7 @@ async function main() {
       runInfo: {
         endedAt,
         endVersion,
+        completed: true,
         result,
         startedAt,
         startVersion

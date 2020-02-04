@@ -183,7 +183,7 @@ The `up` and `down` functions should do whatever they need to do to move data fr
 
 If errors are thrown, they will be caught. In fact, throwing an error is the only way to stop the migration process and mark the migration as failed.
 
-If you return something from your `up` or `down` function, it will be stored as `result` in the migration history. If you throw, the error message will be stored as `result` in the migration history instead.
+If you return a string from your `up` or `down` function, it will be stored as `result` in the migration history. Do not return anything other than a string, or `undefined`, or `null`. If you throw, the error message will be stored as `result` in the migration history instead.
 
 While running, the migration function can and should report its progress by calling `context.progress(percentDone)`. The migration function must return a Promise and when that promise resolves, the migration is considered done and the version for this namespace in the database is incremented. If the Promise is rejected, the migration is considered failed and the data may be in a partially migrated state.
 
