@@ -83,7 +83,25 @@ export default {
 };
 ```
 
-## Commands
+## CLI Commands
+
+To see all commands, run any of the following:
+
+```sh
+migrator
+migrator -h
+migrator --help
+```
+
+To see additional docs and options for a specific command, run any of the following:
+
+```sh
+migrator <command> -h
+migrator <command> --help
+
+# Example
+migrator migrate --help
+```
 
 ### migrator report
 
@@ -123,6 +141,14 @@ If you don't want to be prompted to decide whether to run them (recommended only
 MONGO_URL=mongodb://localhost:27017/dbname migrator migrate -y
 # OR
 MONGO_URL=mongodb://localhost:27017/dbname migrator migrate <env> -y
+```
+
+### migrator unlock-track
+
+To unlock a track if you get errors about it being locked but you're sure that nothing is running those migrations right now, run:
+
+```sh
+MONGO_URL=mongodb://localhost:27017/dbname migrator unlock-track <namespace>
 ```
 
 ### migrator history

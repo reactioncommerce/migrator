@@ -5,7 +5,9 @@
 const { workerData, parentPort } = require("worker_threads");
 
 const connectToMongo = require("./connectToMongo.js");
+const lockTrack = require("./lockTrack.js");
 const pushDatabaseRunInfo = require("./pushDatabaseRunInfo.js");
+const unlockTrack = require("./unlockTrack.js");
 const updateDatabaseVersion = require("./updateDatabaseVersion.js");
 const validateAndTransformVersion = require("./validateAndTransformVersion.js");
 
@@ -26,6 +28,12 @@ async function main() {
 
   const db = await connectToMongo({ mongoUrl });
   log(`Connected to MongoDB database "${db.databaseName}"`);
+
+  const locked = await lockTrack({ db, namespace });
+  if (!locked) {
+    log(`Unable to lock "${namespace}" track for migrating. Skipping.`);
+    return;
+  }
 
   // Run each track migration in series
   for (const step of orderedMigrationSteps) {
@@ -101,6 +109,8 @@ async function main() {
     });
     log(`\n✓ ${namespace} is now at ${endVersion}.`);
   }
+
+  await unlockTrack({ db, namespace });
 }
 
 main()
