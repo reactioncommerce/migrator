@@ -219,7 +219,7 @@ To avoid issues, we strongly suggest that you write idempotent migration code, t
 
 ### How to Check Data Version in App Code
 
-After you've created and exported migrations for you package, the final step is to check the current migration version for each of your namespaces somewhere in your top-level or startup code, after you are connected to MongoDB but before you run any database commands. Do this by depending on the [@reactioncommerce/migrator-version-check](https://github.com/reactioncommerce/migrator-version-check) NPM package and calling the function it exports. Refer to the documentation for that package.
+After you've created and exported migrations for you package, the final step is to check the current migration version for each of your namespaces somewhere in your top-level or startup code, after you are connected to MongoDB but before you run any database commands. Do this by depending on the [@reactioncommerce/db-version-check](https://github.com/reactioncommerce/db-version-check) NPM package and calling the function it exports. Refer to the documentation for that package.
 
 ## Commit Messages
 
