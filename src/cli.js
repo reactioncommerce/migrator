@@ -1,4 +1,5 @@
-#!/usr/bin/env node --no-warnings --experimental-modules --experimental-json-modules
+#!/bin/sh
+':' //; exec node --no-warnings --experimental-modules --experimental-json-modules "$0" "$@"
 
 const log = require("./util/log.js");
 
