@@ -57,7 +57,7 @@ async function loadConfig(configFilePath, { log = () => {} } = {}) {
 
     const trackInfo = packageMigrationConfig.tracks.find((packageTrack) => packageTrack.namespace === namespace);
     if (!trackInfo) {
-      log(`Cannot find migration namespace ${namespace} defined in ${fullTrackMigrationsFilePath}`, "error");
+      log(`Cannot find migration namespace ${namespace} defined in ${importPath}`, "error");
       return null;
     }
 
