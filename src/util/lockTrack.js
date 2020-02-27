@@ -16,7 +16,7 @@ async function lockTrack({ db, namespace }) {
 
   try {
     await collection.updateOne({
-      locked: false,
+      locked: { $ne: true },
       namespace
     }, {
       $set: {
