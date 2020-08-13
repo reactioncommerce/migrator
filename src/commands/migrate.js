@@ -39,10 +39,16 @@ function register(program) {
         process.exit(0);
       }
 
-      let parsedUrl = new URL(MONGO_URL);
-      parsedUrl.username = "USER";
-      parsedUrl.password = "PASS";
-      log(`MongoDB URL: ${parsedUrl.href}\n`);
+      try {
+        // eslint-disable-next-line node/no-unsupported-features/node-builtins
+        const parsedUrl = new URL(MONGO_URL);
+        parsedUrl.username = "USER";
+        parsedUrl.password = "PASS";
+        log(`MongoDB URL: ${parsedUrl.href}\n`);
+      } catch (error) {
+        log("Error parsing URL, not logging to console");
+      }
+
 
       if (!options.yes) {
         const { shouldContinue } = await inquirer.prompt([
