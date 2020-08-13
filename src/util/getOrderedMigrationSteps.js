@@ -1,5 +1,5 @@
-const log = require("./log.js");
 
+// eslint-disable-next-line require-jsdoc
 function checkMigratingUp(currentVersion, desiredVersion) {
   const currentVersionNum = Number(currentVersion.replace("-", "."));
   const desiredVersionNum = Number(desiredVersion.replace("-", "."));
@@ -62,7 +62,7 @@ function getOrderedMigrationSteps(orderedVersionList, currentVersion, desiredVer
   return {
     direction: isMigratingUp ? "up" : "down",
     steps
-  }
+  };
 }
 
 module.exports = getOrderedMigrationSteps;

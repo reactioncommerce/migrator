@@ -1,4 +1,3 @@
-const path = require("path");
 const inquirer = require("inquirer");
 const connectToMongo = require("../util/connectToMongo.js");
 const log = require("../util/log.js");
@@ -27,6 +26,7 @@ function register(program) {
         }
       ]);
 
+      // eslint-disable-next-line no-process-exit
       if (!shouldContinue) process.exit(0);
 
       const db = await connectToMongo({ mongoUrl: MONGO_URL });
@@ -41,10 +41,12 @@ function register(program) {
         });
       } catch (error) {
         log(error.stack || error, "error");
+        // eslint-disable-next-line no-process-exit
         process.exit(1);
       }
 
       log(`History cleared for namespace "${namespace}"`);
+      // eslint-disable-next-line no-process-exit
       process.exit(0);
     });
 }

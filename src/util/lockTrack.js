@@ -2,6 +2,12 @@ const {
   MIGRATIONS_COLLECTION_NAME
 } = require("../constants.js");
 
+/**
+ * @summary lock a particular track
+ * @param {Object} db - The db we are operating on
+ * @param {String} namespace - The namespace we are working on
+ * @returns {Promise<boolean>} Whether the track is locked
+ */
 async function lockTrack({ db, namespace }) {
   const collection = db.collection(MIGRATIONS_COLLECTION_NAME);
   // For locking to work atomically here, we need `locked: false`

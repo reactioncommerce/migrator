@@ -1,13 +1,13 @@
 const path = require("path");
-const checkConfig = require("./checkConfig.js");
-const loadConfig = require("./loadConfig.js");
-const log = require("./log.js");
-
 const {
   CONFIG_FILE_NAME,
   CONFIG_ENV_FILE_NAME
 } = require("../constants.js");
+const checkConfig = require("./checkConfig.js");
+const loadConfig = require("./loadConfig.js");
+const log = require("./log.js");
 
+// eslint-disable-next-line require-jsdoc
 async function loadAndCheckConfig(env, { silent }) {
   let fileName;
   if (env) {
@@ -23,6 +23,7 @@ async function loadAndCheckConfig(env, { silent }) {
       log(status, level);
     }
   });
+  // eslint-disable-next-line no-process-exit
   if (!config) process.exit(1);
 
   const isValid = checkConfig(config, {
@@ -31,6 +32,7 @@ async function loadAndCheckConfig(env, { silent }) {
       log(status, level);
     }
   });
+  // eslint-disable-next-line no-process-exit
   if (!isValid) process.exit(1);
 
   return config;

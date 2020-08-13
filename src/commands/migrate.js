@@ -1,4 +1,3 @@
-const path = require("path");
 const inquirer = require("inquirer");
 const checkDatabaseVersions = require("../util/checkDatabaseVersions.js");
 const connectToMongo = require("../util/connectToMongo.js");
@@ -6,11 +5,7 @@ const runMigrations = require("../util/runMigrations.js");
 const loadAndCheckConfig = require("../util/loadAndCheckConfig.js");
 const log = require("../util/log.js");
 const printReport = require("../util/printReport.js");
-
-const {
-  MIGRATIONS_COLLECTION_NAME,
-  MONGO_URL
-} = require("../constants.js");
+const { MONGO_URL } = require("../constants.js");
 
 /**
  * @summary Registers the `migrator migrate` command
@@ -21,8 +16,8 @@ function register(program) {
   program
     .command("migrate [env]")
     .description("Migrate data to the versions specified in ./migrator-config.js or ./migrator-config-[env].js")
-    .option('-s, --silent', 'Silence verbose status logging')
-    .option('-y, --yes', 'Do not prompt for confirmation before migrating')
+    .option("-s, --silent", "Silence verbose status logging")
+    .option("-y, --yes", "Do not prompt for confirmation before migrating")
     .action(async (env, options) => {
       const config = await loadAndCheckConfig(env, options);
       const db = await connectToMongo({ mongoUrl: MONGO_URL });
@@ -36,10 +31,11 @@ function register(program) {
       const noneNeeded = tracks.every(({ isMigrationNeeded }) => isMigrationNeeded === false);
       if (noneNeeded) {
         log("No migrations needed");
+        // eslint-disable-next-line no-process-exit
         process.exit(0);
       }
 
-      let parsedUrl = new URL(MONGO_URL);
+      const parsedUrl = new URL(MONGO_URL);
       parsedUrl.username = "USER";
       parsedUrl.password = "PASS";
       log(`MongoDB URL: ${parsedUrl.href}\n`);
@@ -54,6 +50,7 @@ function register(program) {
           }
         ]);
 
+        // eslint-disable-next-line no-process-exit
         if (!shouldContinue) process.exit(0);
       }
 
@@ -65,9 +62,11 @@ function register(program) {
         });
       } catch (error) {
         log(error.stack || error, "error");
+        // eslint-disable-next-line no-process-exit
         process.exit(1);
       }
 
+      // eslint-disable-next-line no-process-exit
       process.exit(0);
     });
 }

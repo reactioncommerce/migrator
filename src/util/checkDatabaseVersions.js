@@ -1,9 +1,9 @@
-const validateAndTransformVersion = require("./validateAndTransformVersion.js");
-
 const {
   MIGRATIONS_COLLECTION_NAME
 } = require("../constants.js");
+const validateAndTransformVersion = require("./validateAndTransformVersion.js");
 
+// eslint-disable-next-line require-jsdoc
 async function checkDatabaseVersions({ db, tracks }) {
   const promises = tracks.map(async (track) => {
     const doc = await db.collection(MIGRATIONS_COLLECTION_NAME).findOne({ namespace: track.namespace });

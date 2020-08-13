@@ -20,6 +20,7 @@ async function loadConfig(configFilePath, { log = () => {} } = {}) {
 
   log(`Loading config from ${configFilePath}...`);
 
+  // eslint-disable-next-line node/no-unsupported-features/es-syntax
   const { default: configFile } = await import(configFilePath);
   const { tracks: trackList } = configFile || {};
 
@@ -28,7 +29,7 @@ async function loadConfig(configFilePath, { log = () => {} } = {}) {
     return null;
   }
 
-  log(`✓ Loaded config\n\nAttempting to find and load all listed tracks...`);
+  log("✓ Loaded config\n\nAttempting to find and load all listed tracks...");
 
   const tracks = [];
   for (const track of trackList) {
@@ -49,6 +50,7 @@ async function loadConfig(configFilePath, { log = () => {} } = {}) {
       return null;
     }
 
+    // eslint-disable-next-line node/no-unsupported-features/es-syntax,no-await-in-loop
     const { migrations: packageMigrationConfig } = await import(importPath);
     if (!packageMigrationConfig) {
       log(`No migration config could be imported. "${importPath}" has no ESM export named "migrations".`, "error");
@@ -81,7 +83,8 @@ async function loadConfig(configFilePath, { log = () => {} } = {}) {
     if (badVersions) return null;
 
     trackInfo.migrations = migrationsWithCleanedKeys;
-    trackInfo.orderedVersionList.sort((a, b) => Number(a.replace("-", ".")) - Number(b.replace("-", ".")))
+    // eslint-disable-next-line id-length
+    trackInfo.orderedVersionList.sort((a, b) => Number(a.replace("-", ".")) - Number(b.replace("-", ".")));
 
     trackInfo.desiredVersion = validateAndTransformVersion(version);
     if (trackInfo.desiredVersion === null) return null;
