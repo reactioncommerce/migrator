@@ -45,7 +45,8 @@ function register(program) {
         parsedUrl.username = "USER";
         parsedUrl.password = "PASS";
       } catch (error) {
-        log("Error parsing URL", error);
+        log(error.stack || error, "error");
+        process.exit(1);
       }
 
 
