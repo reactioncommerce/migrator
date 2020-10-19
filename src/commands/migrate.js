@@ -46,7 +46,6 @@ function register(program) {
         parsedUrl.password = "PASS";
       } catch (error) {
         log(error.stack || error, "error");
-        process.exit(1);
       }
 
 
