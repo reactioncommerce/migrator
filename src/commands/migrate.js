@@ -44,9 +44,8 @@ function register(program) {
         const parsedUrl = new URL(MONGO_URL);
         parsedUrl.username = "USER";
         parsedUrl.password = "PASS";
-        log(`MongoDB URL: ${parsedUrl.href}\n`);
       } catch (error) {
-        log("Error parsing URL, not logging to console");
+        log("Error parsing URL", error);
       }
 
 
