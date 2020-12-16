@@ -31,7 +31,7 @@
     "commander": "^2.20.0",
     "envalid": "^6.0.1",
     "inquirer": "^6.5.0",
-    "mongodb": "^3.5.2",
+    "mongodb": "3.6.2",
     "pretty-ms": "^5.1.0"
   },
   "devDependencies": {
