@@ -35,10 +35,15 @@ function register(program) {
         process.exit(0);
       }
 
-      const parsedUrl = new URL(MONGO_URL);
-      parsedUrl.username = "USER";
-      parsedUrl.password = "PASS";
-      log(`MongoDB URL: ${parsedUrl.href}\n`);
+      try {
+        // eslint-disable-next-line node/no-unsupported-features/node-builtins
+        const parsedUrl = new URL(MONGO_URL);
+        parsedUrl.username = "USER";
+        parsedUrl.password = "PASS";
+      } catch (error) {
+        log(error.stack || error, "error");
+      }
+
 
       if (!options.yes) {
         const { shouldContinue } = await inquirer.prompt([
