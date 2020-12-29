@@ -20,7 +20,7 @@ function checkConfig({ tracks } = {}, { log = () => {} } = {}) {
       migrations,
       namespace,
       orderedVersionList,
-      package
+      package: packageName
     } = track || {};
 
     if (typeof namespace !== "string" || namespace.length === 0) {
@@ -39,9 +39,10 @@ function checkConfig({ tracks } = {}, { log = () => {} } = {}) {
       foundDesiredVersion = orderedVersionList.includes(desiredVersion);
       if (!foundDesiredVersion) {
         const highestMajorVersion = orderedVersionList[orderedVersionList.length - 1];
-        log(`Configuration asks for version ${desiredVersion} for the ${namespace} track, but that version does not exist in the track migrations. Highest version found is ${highestMajorVersion}.`, "error");
-        if (package) {
-          log(`\nPerhaps you need to 'npm install ${package}@latest' to get new migrations.`, "error");
+        log(`Configuration asks for version ${desiredVersion} for the ${namespace} track, but that version does not exist in the track migrations.
+        Highest version found is ${highestMajorVersion}.`, "error");
+        if (packageName) {
+          log(`\nPerhaps you need to 'npm install ${packageName}@latest' to get new migrations.`, "error");
         }
         return false;
       }

@@ -17,10 +17,11 @@ const {
   mongoUrl,
   namespace,
   orderedMigrationSteps,
-  package,
+  package: packageName,
   path
 } = workerData;
 
+// eslint-disable-next-line require-jsdoc
 async function main() {
   const log = (...args) => {
     parentPort.postMessage({ log: args });
@@ -46,8 +47,9 @@ async function main() {
     try {
       // Functions cannot be passed between threads so we
       // re-import the migration functions here.
+      // eslint-disable-next-line no-await-in-loop,node/no-unsupported-features/es-syntax
       const { migrations: packageMigrationConfig } = await import(importPath);
-      const track = packageMigrationConfig.tracks.find((track) => track.namespace === namespace);
+      const track = packageMigrationConfig.tracks.find((trk) => trk.namespace === namespace);
       const versionKey = Object.getOwnPropertyNames(track.migrations).find((version) => validateAndTransformVersion(version) === stepVersion);
       const stepFn = track.migrations[versionKey][direction];
 
@@ -55,10 +57,12 @@ async function main() {
         if (stepFn === "unnecessary") {
           result = "unnecessary";
         } else {
+          // eslint-disable-next-line max-len
           log(`Migrating "${namespace}" namespace ${direction} from ${startVersion} to ${endVersion} is not possible. Restore from a database backup instead.`, "error");
           break;
         }
       } else {
+        // eslint-disable-next-line no-await-in-loop
         result = await stepFn({
           db,
           progress(percent) {
@@ -76,8 +80,10 @@ async function main() {
       parentPort.postMessage({ progress: 0 });
       log("\n");
       log(error.stack || error, "error");
-      log(`\nThe above error occurred in the "${direction}" function for the "${stepVersion}" version in the "${namespace}" namespace, which is defined in ${package ? `the "${package}" package` : path}`, "error");
+      // eslint-disable-next-line max-len
+      log(`\nThe above error occurred in the "${direction}" function for the "${stepVersion}" version in the "${namespace}" namespace, which is defined in ${packageName ? `the "${packageName}" package` : path}`, "error");
       const endedAt = new Date();
+      // eslint-disable-next-line no-await-in-loop
       await pushDatabaseRunInfo({
         db,
         namespace,
@@ -94,6 +100,7 @@ async function main() {
     }
 
     const endedAt = new Date();
+    // eslint-disable-next-line no-await-in-loop
     await updateDatabaseVersion({
       db,
       namespace,
@@ -114,6 +121,7 @@ async function main() {
 }
 
 main()
+  // eslint-disable-next-line promise/always-return
   .then((result) => {
     parentPort.postMessage({ done: true, result });
   })
