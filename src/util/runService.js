@@ -2,6 +2,7 @@ const path = require("path");
 const { Worker } = require("worker_threads");
 const cliProgress = require("cli-progress");
 
+// eslint-disable-next-line require-jsdoc
 function runService({
   direction,
   importPath,
@@ -9,7 +10,7 @@ function runService({
   mongoUrl,
   namespace,
   orderedMigrationSteps,
-  package,
+  package: packageName,
   path: migrationPath
 }) {
   const progressBar = new cliProgress.SingleBar({
@@ -26,7 +27,7 @@ function runService({
         mongoUrl,
         namespace,
         orderedMigrationSteps,
-        package,
+        package: packageName,
         path: migrationPath
       }
     });
@@ -53,8 +54,8 @@ function runService({
       if (code !== 0) {
         reject(new Error(`Worker stopped with exit code ${code}`));
       }
-    })
-  })
+    });
+  });
 }
 
 module.exports = runService;

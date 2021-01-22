@@ -1,6 +1,5 @@
-const path = require("path");
+/* eslint-disable no-console */
 const prettyMs = require("pretty-ms");
-const checkDatabaseVersions = require("../util/checkDatabaseVersions.js");
 const connectToMongo = require("../util/connectToMongo.js");
 const log = require("../util/log.js");
 
@@ -23,22 +22,22 @@ function register(program) {
       const doc = await db.collection(MIGRATIONS_COLLECTION_NAME).findOne({ namespace });
       if (!doc || !Array.isArray(doc.runHistory) || doc.runHistory.length === 0) {
         log(`No migration run history found for namespace "${namespace}"`);
+        // eslint-disable-next-line no-process-exit
         process.exit(0);
       }
 
-      const history = doc.runHistory.map((entry) => {
-        return {
-          versionChange: `${entry.startVersion} -> ${entry.endVersion}`,
-          startedAt: entry.startedAt.toLocaleString(),
-          endedAt: entry.endedAt.toLocaleString(),
-          time: prettyMs(entry.endedAt - entry.startedAt),
-          result: entry.result
-        };
-      });
+      const history = doc.runHistory.map((entry) => ({
+        versionChange: `${entry.startVersion} -> ${entry.endVersion}`,
+        startedAt: entry.startedAt.toLocaleString(),
+        endedAt: entry.endedAt.toLocaleString(),
+        time: prettyMs(entry.endedAt - entry.startedAt),
+        result: entry.result
+      }));
 
       console.log("\n");
       console.table(history);
       console.log("\n");
+      // eslint-disable-next-line no-process-exit
       process.exit(0);
     });
 }

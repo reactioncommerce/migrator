@@ -5,6 +5,7 @@ const log = require("./log.js");
  *   a number or a string, transforms it to the standard string
  *   version format, and validates that it's acceptable.
  * @param {String|Number} version Version identifier
+ * @param {Number} firstNumberMinimum - The minimum first number
  * @returns {String|null} Cleaned and valid version, or `null`
  *   if invalid
  */

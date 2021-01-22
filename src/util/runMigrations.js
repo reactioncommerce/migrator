@@ -1,7 +1,8 @@
 const getOrderedMigrationSteps = require("./getOrderedMigrationSteps.js");
 const runService = require("./runService.js");
 
-async function runMigrations(tracks, { db, log, mongoUrl }) {
+// eslint-disable-next-line require-jsdoc
+async function runMigrations(tracks, { log, mongoUrl }) {
   // Run track migrations in parallel
   const promises = tracks.map(async (track) => {
     const {
@@ -9,10 +10,9 @@ async function runMigrations(tracks, { db, log, mongoUrl }) {
       desiredVersion,
       importPath,
       isMigrationNeeded,
-      migrations,
       namespace,
       orderedVersionList,
-      package,
+      package: packageName,
       path
     } = track;
 
@@ -48,7 +48,7 @@ async function runMigrations(tracks, { db, log, mongoUrl }) {
       mongoUrl,
       namespace,
       orderedMigrationSteps,
-      package,
+      package: packageName,
       path
     });
   });
